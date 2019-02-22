@@ -114,7 +114,7 @@ RAMTOP:		EQU	0x5CB2
 
 ; Change the ORG statement for the 16k model or to
 ; suit your particular needs.
-	ORG	63042
+	ORG	63055
 
 ; This replaces the NEW command and sets up the system
 NEW:	LD	HL,(RAMTOP)
@@ -874,19 +874,14 @@ FLASHC:	LD	HL,(ECHO_E)
 	JR	Z,POPRET
 	CALL	CLSET
 	RR	C
-	LD	B,8
-	JR	NC,FL2
-FL1:	RLD
-	CPL
-	RRD
+	LD	BC,0x80F
+	JR	NC,FL
+	LD	C,0xF0
+FL:	LD	A,(HL)
+	XOR	C
+	LD	(HL),A
 	INC	H
-	DJNZ	FL1
-	JR	POPRET
-FL2:	RRD
-	CPL
-	RLD
-	INC	H
-	DJNZ	FL2
+	DJNZ	FL
 POPRET:	POP	BC
 	POP	HL
 	CALL	POST_E
